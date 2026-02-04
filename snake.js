@@ -41,7 +41,7 @@ function addScoreToRanking(score) {
 }
 
 function resetGame() {
-    snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 }; // dx: grid로 초기화
+    snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
     apple = { x: getRandomInt(0, 20) * grid, y: getRandomInt(0, 20) * grid };
     score = 0;
     isGameOver = false;
@@ -49,6 +49,7 @@ function resetGame() {
     gameOverMsg.style.display = 'none';
     restartBtn.disabled = true;
     startBtn.disabled = false;
+    draw(); // 게임 초기화 시 화면 갱신
 }
 
 function setSpeed(level) {
@@ -152,6 +153,10 @@ window.startGame = function() {
     // 반드시 시작 시 오른쪽으로 이동하도록 설정
     snake.dx = grid;
     snake.dy = 0;
+    // snake.cells가 비어있으면 초기 위치 추가
+    if (!snake.cells || snake.cells.length === 0) {
+        snake.cells = [{ x: snake.x, y: snake.y }];
+    }
     startBtn.disabled = true;
     restartBtn.disabled = true;
     loop();
@@ -159,14 +164,12 @@ window.startGame = function() {
 
 window.restartGame = function() {
     resetGame();
-    draw();
 };
 
 function init() {
     loadRanking();
     setSpeed('normal');
     resetGame();
-    draw();
 }
 
 init();
